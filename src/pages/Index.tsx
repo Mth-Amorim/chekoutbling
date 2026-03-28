@@ -20,10 +20,13 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-            <ScanBarcode className="h-5 w-5 text-primary-foreground" />
-          </div>
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
+          <img
+            src="https://acdn-us.mitiendanube.com/stores/005/081/561/themes/toluca/img-49697943-1757160534-b49360ea4a826198c3297547b5588ade1757160534.png?4022911048044583491"
+            alt="Logo da empresa"
+            className="h-10 object-contain"
+          />
+          <div className="h-6 w-px bg-border" />
           <div>
             <h1 className="text-lg font-bold text-foreground tracking-tight">Checkout Conferência</h1>
             <p className="text-xs text-muted-foreground">Sistema de conferência por bipagem</p>
