@@ -1,16 +1,79 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Package, ShoppingCart, AlertTriangle, ScanBarcode } from "lucide-react";
+import SalesConference from "@/components/SalesConference";
+import PurchaseConference from "@/components/PurchaseConference";
+import DamageRegistration from "@/components/DamageRegistration";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+type Section = "sales" | "purchase" | "damage";
+
+const tabs: { id: Section; label: string; icon: React.ReactNode }[] = [
+  { id: "sales", label: "Venda", icon: <Package className="h-4 w-4" /> },
+  { id: "purchase", label: "Compras", icon: <ShoppingCart className="h-4 w-4" /> },
+  { id: "damage", label: "Avaria", icon: <AlertTriangle className="h-4 w-4" /> },
+];
+
+const Index = () => {
+  const [activeSection, setActiveSection] = useState<Section>("sales");
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
+            <ScanBarcode className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-foreground tracking-tight">Checkout Conferência</h1>
+            <p className="text-xs text-muted-foreground">Sistema de conferência por bipagem</p>
+          </div>
+        </div>
+      </header>
+
+      {/* Tabs */}
+      <div className="border-b border-border bg-card">
+        <div className="max-w-4xl mx-auto px-4">
+          <nav className="flex gap-1">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSection(tab.id)}
+                className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
+                  activeSection === tab.id
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+                {activeSection === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                  />
+                )}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Content */}
+      <main className="max-w-4xl mx-auto px-4 py-6">
+        <motion.div
+          key={activeSection}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {activeSection === "sales" && <SalesConference />}
+          {activeSection === "purchase" && <PurchaseConference />}
+          {activeSection === "damage" && <DamageRegistration />}
+        </motion.div>
+      </main>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
