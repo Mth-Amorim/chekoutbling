@@ -7,18 +7,19 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const apiBase = env.VITE_API_BASE ?? "http://localhost:52534";
+  const appPort = Number(env.APP_PORT ?? 8080);
 
   return {
     server: {
       host: "::",
-      port: 8080,
+      port: appPort,
       hmr: {
         overlay: false,
       },
       proxy: {
         "/api": {
           target: apiBase,
-          changeOrigin: true, 
+          changeOrigin: true,
           secure: false,
         },
       },
