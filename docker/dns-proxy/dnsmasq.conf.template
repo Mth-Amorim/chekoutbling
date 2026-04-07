@@ -1,0 +1,9 @@
+no-daemon
+log-facility=-
+domain-needed
+bogus-priv
+stop-dns-rebind
+listen-address=0.0.0.0
+bind-interfaces
+address=/${INTERNAL_DNS_DOMAIN}/${INTERNAL_APP_IP}
+server=${UPSTREAM_DNS}
