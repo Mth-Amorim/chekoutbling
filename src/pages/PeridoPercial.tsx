@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, PackageSearch } from "lucide-react";
+import { ArrowLeft, Loader2, PackageSearch } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +14,44 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+const API_BASE = ""; // requests go via Vite proxy → VITE_API_BASE in .env
+
+interface ApiProduct {
+  item_id: number;
+  codigo: string;
+  descricao: string;
+  unidade: string;
+  quantidade: number;
+  quantidade_total?: number;
+  valor: number;
+  desconto: number;
+  produto: { id: number };
+  imagem_url?: string;
+  estrutura_grade?: {
+    produto_id: number;
+    quantidade_estrutura: number;
+    quantidade_pedido: number;
+    quantidade_total: number;
+  }[];
+}
+
+interface ApiResponse {
+  data: {
+    numero_pedido: number;
+    id_pedido: number;
+    total_itens: number;
+    produtos: Record<string, ApiProduct>;
+  };
+}
+
 interface PartialOrderItem {
   id: string;
+  codigo: string;
   product: string;
+  imageUrl?: string;
+  unidade: string;
+  gradeFactor: number;
+  quantityTotal: number;
   quantityInOrder: number;
 }
 
@@ -25,58 +60,93 @@ interface PartialOrder {
   items: PartialOrderItem[];
 }
 
-const MOCK_ORDERS: Record<string, PartialOrder> = {
-  "1001": {
-    id: "1001",
-    items: [
-      { id: "a1", product: "Caixa Organizadora P", quantityInOrder: 12 },
-      { id: "a2", product: "Kit Unha Gel", quantityInOrder: 8 },
-      { id: "a3", product: "Lixa Profissional", quantityInOrder: 20 },
-    ],
-  },
-  "1002": {
-    id: "1002",
-    items: [
-      { id: "b1", product: "Base Fortalecedora", quantityInOrder: 15 },
-      { id: "b2", product: "Esmalte Nude", quantityInOrder: 30 },
-    ],
-  },
-};
-
 const PeridoPercial = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [activeOrder, setActiveOrder] = useState<PartialOrder | null>(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [separationByItem, setSeparationByItem] = useState<
     Record<string, number>
   >({});
 
-  const handleSearchOrder = () => {
-    const order = MOCK_ORDERS[orderNumber.trim()];
+  const handleSearchOrder = async () => {
+    const num = orderNumber.trim();
+    if (!num) return;
 
-    if (!order) {
-      setActiveOrder(null);
-      setSeparationByItem({});
-      setError("Pedido não encontrado.");
-      return;
-    }
-
-    const initialSeparation = order.items.reduce<Record<string, number>>(
-      (accumulator, item) => {
-        accumulator[item.id] = 0;
-        return accumulator;
-      },
-      {},
-    );
-
-    setActiveOrder(order);
-    setSeparationByItem(initialSeparation);
+    setLoading(true);
     setError("");
+    setActiveOrder(null);
+    setSeparationByItem({});
+
+    try {
+      const response = await fetch(`${API_BASE}/api/pedidos/${num}/itens`);
+
+      if (!response.ok) {
+        setError(
+          response.status === 404
+            ? "Pedido não encontrado."
+            : `Erro ao buscar pedido (${response.status}).`,
+        );
+        return;
+      }
+
+      const json: ApiResponse = await response.json();
+      const { numero_pedido, produtos } = json.data;
+
+      const items: PartialOrderItem[] = Object.values(produtos).map((p) => {
+        const gradeFactor =
+          p.estrutura_grade?.reduce(
+            (acc, grade) => acc + Number(grade.quantidade_estrutura || 0),
+            0,
+          ) ?? 0;
+
+        const gradeTotal =
+          p.estrutura_grade?.reduce(
+            (acc, grade) => acc + Number(grade.quantidade_total || 0),
+            0,
+          ) ?? 0;
+
+        const quantityTotal =
+          Number(p.quantidade_total ?? 0) > 0
+            ? Number(p.quantidade_total)
+            : gradeTotal > 0
+              ? gradeTotal
+              : Number(p.quantidade);
+
+        return {
+          id: String(p.item_id),
+          codigo: p.codigo,
+          product: p.descricao,
+          imageUrl: p.imagem_url,
+          unidade: p.unidade,
+          gradeFactor,
+          quantityTotal,
+          quantityInOrder: p.quantidade,
+        };
+      });
+
+      const initialSeparation = items.reduce<Record<string, number>>(
+        (acc, item) => {
+          acc[item.id] = 0;
+          return acc;
+        },
+        {},
+      );
+
+      setActiveOrder({ id: String(numero_pedido), items });
+      setSeparationByItem(initialSeparation);
+    } catch {
+      setError(
+        "Não foi possível conectar à API. Verifique se ela está rodando.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChangeSeparation = (
     itemId: string,
-    quantityInOrder: number,
+    quantityLimit: number,
     value: string,
   ) => {
     const parsedValue = Number(value);
@@ -85,7 +155,7 @@ const PeridoPercial = () => {
       return;
     }
 
-    const clampedValue = Math.max(0, Math.min(quantityInOrder, parsedValue));
+    const clampedValue = Math.max(0, Math.min(quantityLimit, parsedValue));
 
     setSeparationByItem((previous) => ({
       ...previous,
@@ -172,18 +242,28 @@ const PeridoPercial = () => {
                   event.key === "Enter" && handleSearchOrder()
                 }
                 className="font-mono text-lg h-12 bg-muted border-border"
+                disabled={loading}
+                inputMode="numeric"
+                pattern="[0-9]*"
                 autoFocus
               />
-              <Button onClick={handleSearchOrder} className="h-12 px-6">
-                Buscar pedido
+              <Button
+                onClick={handleSearchOrder}
+                className="h-12 px-6"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />{" "}
+                    Buscando...
+                  </>
+                ) : (
+                  "Buscar pedido"
+                )}
               </Button>
             </div>
 
             {error && <p className="text-sm text-destructive mt-3">{error}</p>}
-
-            <p className="text-xs text-muted-foreground mt-4">
-              Pedidos de teste: 1001 e 1002.
-            </p>
           </motion.div>
         </main>
       </div>
@@ -244,28 +324,62 @@ const PeridoPercial = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
-                <TableHead>Produto</TableHead>
-                <TableHead className="text-right">Qtd no pedido</TableHead>
+                <TableHead className="w-20">Imagem</TableHead>
+                <TableHead>Informações</TableHead>
+                <TableHead className="text-right">Qtd pedido</TableHead>
+                <TableHead className="text-right">Qtd total</TableHead>
                 <TableHead className="text-right">Qtd para separar</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {activeOrder.items.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.product}</TableCell>
+                  <TableCell>
+                    <div className="h-14 w-14 overflow-hidden rounded-md border border-border bg-muted">
+                      {item.imageUrl ? (
+                        <img
+                          src={item.imageUrl}
+                          alt={item.product}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
+                          Sem imagem
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="font-medium leading-tight text-foreground break-words">
+                        {item.product}
+                      </p>
+                      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        <span className="font-mono">Cod: {item.codigo}</span>
+                        <span>Unid: {item.unidade}</span>
+                        {item.gradeFactor > 0 && (
+                          <span>Grade: {item.gradeFactor}</span>
+                        )}
+                      </div>
+                    </div>
+                  </TableCell>
                   <TableCell className="text-right font-mono">
                     {item.quantityInOrder}
+                  </TableCell>
+                  <TableCell className="text-right font-mono">
+                    {item.quantityTotal}
                   </TableCell>
                   <TableCell className="text-right">
                     <Input
                       type="number"
                       min={0}
-                      max={item.quantityInOrder}
+                      max={item.quantityTotal}
                       value={separationByItem[item.id] ?? 0}
                       onChange={(event) =>
                         handleChangeSeparation(
                           item.id,
-                          item.quantityInOrder,
+                          item.quantityTotal,
                           event.target.value,
                         )
                       }
