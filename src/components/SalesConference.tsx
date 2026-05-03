@@ -23,6 +23,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ApiProduct {
   codigo_barras: string;
@@ -115,7 +121,7 @@ const SalesConference = () => {
   const [boxes, setBoxes] = useState<BoxDraft[]>([]);
   const [barcodeInput, setBarcodeInput] = useState("");
   const [scanLog, setScanLog] = useState<
-    { barcode: string; time: Date; status: "known" | "warning" }[]
+    { barcode: string; time: Date; status: "known" | "unknown" | "excess" }[]
   >([]);
   const [pendingUnknownBarcode, setPendingUnknownBarcode] = useState<
     string | null
@@ -123,10 +129,16 @@ const SalesConference = () => {
   const [pendingExcessScan, setPendingExcessScan] =
     useState<PendingExcessScan | null>(null);
   const [scannedQty, setScannedQty] = useState<Record<string, number>>({});
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const barcodeRef = useRef<HTMLInputElement>(null);
   const isUnknownDialogOpen = Boolean(pendingUnknownBarcode);
   const isExcessDialogOpen = Boolean(pendingExcessScan);
   const isDialogOpen = isUnknownDialogOpen || isExcessDialogOpen;
+
+  const selectedProduct = useMemo(() => {
+    if (!selectedProductId || !activeOrder) return null;
+    return activeOrder.items.find((item) => item.id === selectedProductId) || null;
+  }, [selectedProductId, activeOrder]);
 
   const barcodeToItemId = useMemo(() => {
     if (!activeOrder) return {} as Record<string, string>;
@@ -268,7 +280,7 @@ const SalesConference = () => {
   const handleContinueUnknown = () => {
     if (!pendingUnknownBarcode) return;
     setScanLog((prev) => [
-      { barcode: pendingUnknownBarcode, time: new Date(), status: "warning" },
+      { barcode: pendingUnknownBarcode, time: new Date(), status: "unknown" },
       ...prev,
     ]);
     setPendingUnknownBarcode(null);
@@ -286,7 +298,7 @@ const SalesConference = () => {
       {
         barcode: pendingExcessScan.barcode,
         time: new Date(),
-        status: "warning",
+        status: "excess",
       },
       ...prev,
     ]);
@@ -318,6 +330,15 @@ const SalesConference = () => {
     setScannedQty({});
     setScanLog([]);
     setError("");
+    setSelectedProductId(null);
+  };
+
+  const handleSelectProduct = (itemId: string) => {
+    setSelectedProductId(itemId);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProductId(null);
   };
 
   // Derived status
@@ -331,6 +352,38 @@ const SalesConference = () => {
     });
     return { total, done, allDone: done >= total };
   }, [activeOrder, scannedQty]);
+
+  const inconsistencyStatus = useMemo(() => {
+    if (!activeOrder) {
+      return {
+        wrongCodeCount: 0,
+        quantityLowerCount: 0,
+        quantityHigherCount: 0,
+        hasInconsistency: false,
+      };
+    }
+
+    const wrongCodeCount = scanLog.filter(
+      (entry) => entry.status === "unknown",
+    ).length;
+
+    let quantityLowerCount = 0;
+    let quantityHigherCount = 0;
+
+    activeOrder.items.forEach((item) => {
+      const scanned = scannedQty[item.id] || 0;
+      if (scanned < item.quantityRequired) quantityLowerCount += 1;
+      if (scanned > item.quantityRequired) quantityHigherCount += 1;
+    });
+
+    return {
+      wrongCodeCount,
+      quantityLowerCount,
+      quantityHigherCount,
+      hasInconsistency:
+        wrongCodeCount > 0 || quantityLowerCount > 0 || quantityHigherCount > 0,
+    };
+  }, [activeOrder, scanLog, scannedQty]);
 
   const startPackagingStep = () => {
     if (!activeOrder) return;
@@ -747,6 +800,20 @@ const SalesConference = () => {
         </div>
       </div>
 
+      <div className="px-3 py-2 border-b border-border bg-muted/40 shrink-0">
+        <p
+          className={`text-xs ${
+            inconsistencyStatus.hasInconsistency
+              ? "text-warning"
+              : "text-muted-foreground"
+          }`}
+        >
+          Inconsistências: códigos errados {inconsistencyStatus.wrongCodeCount}{" "}
+          • quantidade menor {inconsistencyStatus.quantityLowerCount} •
+          quantidade maior {inconsistencyStatus.quantityHigherCount}
+        </p>
+      </div>
+
       {/* Two columns */}
       <div className="flex-1 grid grid-cols-2 min-h-0">
         {/* LEFT — Bipagem */}
@@ -842,7 +909,8 @@ const SalesConference = () => {
                 <motion.div
                   key={item.id}
                   layout
-                  className={`rounded-lg border p-3 transition-colors ${
+                  onClick={() => handleSelectProduct(item.id)}
+                  className={`rounded-lg border p-3 transition-colors cursor-pointer hover:bg-muted/50 ${
                     isComplete
                       ? "border-success/40 bg-success/5"
                       : "border-border bg-card"
@@ -1011,6 +1079,76 @@ const SalesConference = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {selectedProduct && (
+        <Dialog open={Boolean(selectedProductId)} onOpenChange={handleCloseModal}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="sticky top-0 bg-background pb-4 border-b">
+              <DialogTitle className="text-xl">{selectedProduct.name}</DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              {/* Imagem grande */}
+              {selectedProduct.imageUrl && (
+                <div className="flex justify-center">
+                  <img
+                    src={selectedProduct.imageUrl}
+                    alt={selectedProduct.name}
+                    className="max-h-96 max-w-full object-contain rounded-lg border border-border"
+                  />
+                </div>
+              )}
+
+              {/* Informações do produto */}
+              <div className="space-y-4 bg-muted/30 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Código do Item</p>
+                    <p className="font-mono font-semibold text-foreground">
+                      {selectedProduct.code}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Código de Barras</p>
+                    <p className="font-mono font-semibold text-foreground">
+                      {selectedProduct.barcodes[0] || "—"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quantidades */}
+              <div className="space-y-4 bg-muted/30 p-4 rounded-lg">
+                <h3 className="font-semibold text-foreground">Quantidades</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">Qtd Requerida</p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedProduct.quantityRequired}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">Qtd Bipada</p>
+                    <p className="text-2xl font-bold text-primary">
+                      {scannedQty[selectedProduct.id] || 0}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">Status</p>
+                    <p className={`text-2xl font-bold ${
+                      (scannedQty[selectedProduct.id] || 0) >= selectedProduct.quantityRequired
+                        ? "text-success"
+                        : "text-warning"
+                    }`}>
+                      {(scannedQty[selectedProduct.id] || 0) >= selectedProduct.quantityRequired ? "✓" : "×"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </motion.div>
   );
 };

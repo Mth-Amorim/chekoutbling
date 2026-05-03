@@ -1,10 +1,16 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2, PackageSearch } from "lucide-react";
+import { ArrowLeft, Loader2, PackageSearch, Printer, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -15,11 +21,55 @@ import {
 } from "@/components/ui/table";
 
 const API_BASE = ""; // requests go via Vite proxy → VITE_API_BASE in .env
+const API_BASE_FALLBACK = (import.meta.env.VITE_API_BASE || "").trim();
+const PARTIAL_ORDER_ENDPOINTS = [
+  "/api/pedido/parcial",
+  "/api/pedidos/parcial",
+  "/api/pedidos/parciais",
+];
+
+const getApiErrorMessage = async (response: Response) => {
+  const fallback = `Erro ao lançar pedido parcial (${response.status}).`;
+
+  if (response.status === 404) {
+    return "Endpoint de pedido parcial não encontrado (404). Verifique a rota da API para lançamento parcial.";
+  }
+
+  try {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+      const json = await response.json();
+
+      if (typeof json?.detail === "string") {
+        return json.detail;
+      }
+
+      if (Array.isArray(json?.detail)) {
+        return json.detail
+          .map((item) => item?.msg || item?.message)
+          .filter(Boolean)
+          .join("; ");
+      }
+
+      if (typeof json?.message === "string") {
+        return json.message;
+      }
+    }
+
+    const text = await response.text();
+    return text || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 interface ApiProduct {
   item_id: number;
   codigo: string;
+  codigo_barras?: string;
   descricao: string;
+  link?: string;
   unidade: string;
   quantidade: number;
   quantidade_total?: number;
@@ -32,6 +82,7 @@ interface ApiProduct {
     quantidade_estrutura: number;
     quantidade_pedido: number;
     quantidade_total: number;
+    codigo_barras?: string;
   }[];
 }
 
@@ -47,6 +98,9 @@ interface ApiResponse {
 interface PartialOrderItem {
   id: string;
   codigo: string;
+  codigoBarras: string;
+  gradeBarcodes: string[];
+  link: string;
   product: string;
   imageUrl?: string;
   unidade: string;
@@ -55,19 +109,91 @@ interface PartialOrderItem {
   quantityInOrder: number;
 }
 
+interface PartialOrderPayload {
+  numero_pedido: number;
+  itens: {
+    codigo_barras: string;
+    estrutura_grade: {
+      codigo_barras: string;
+    }[];
+    quantidade_parcial: number;
+  }[];
+}
+
 interface PartialOrder {
   id: string;
+  idPedido: number;
+  totalItens: number;
+  produtos: Record<string, ApiProduct>;
   items: PartialOrderItem[];
 }
+
+const postPartialOrder = async (payload: PartialOrderPayload) => {
+  const bases = [API_BASE, API_BASE_FALLBACK].filter(
+    (base, index, allBases) => Boolean(base) || index === 0 || !allBases[0],
+  );
+
+  let lastResponse: Response | null = null;
+  let lastNetworkError: Error | null = null;
+
+  for (const base of bases) {
+    for (const endpoint of PARTIAL_ORDER_ENDPOINTS) {
+      try {
+        const response = await fetch(`${base}${endpoint}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.status === 404) {
+          lastResponse = response;
+          continue;
+        }
+
+        return response;
+      } catch (error) {
+        lastNetworkError =
+          error instanceof Error
+            ? error
+            : new Error("Falha de rede ao enviar pedido parcial.");
+      }
+    }
+  }
+
+  if (lastResponse) {
+    return lastResponse;
+  }
+
+  throw (
+    lastNetworkError ||
+    new Error(
+      "Falha de rede ao enviar pedido parcial. Verifique proxy/API e tente novamente.",
+    )
+  );
+};
 
 const PeridoPercial = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [activeOrder, setActiveOrder] = useState<PartialOrder | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [separationByItem, setSeparationByItem] = useState<
     Record<string, number>
   >({});
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null,
+  );
+
+  const selectedProduct = useMemo(() => {
+    if (!selectedProductId || !activeOrder) return null;
+    return (
+      activeOrder.items.find((item) => item.id === selectedProductId) || null
+    );
+  }, [selectedProductId, activeOrder]);
 
   const handleSearchOrder = async () => {
     const num = orderNumber.trim();
@@ -91,7 +217,7 @@ const PeridoPercial = () => {
       }
 
       const json: ApiResponse = await response.json();
-      const { numero_pedido, produtos } = json.data;
+      const { numero_pedido, id_pedido, total_itens, produtos } = json.data;
 
       const items: PartialOrderItem[] = Object.values(produtos).map((p) => {
         const gradeFactor =
@@ -116,6 +242,11 @@ const PeridoPercial = () => {
         return {
           id: String(p.item_id),
           codigo: p.codigo,
+          codigoBarras: (p.codigo_barras || "").trim(),
+          gradeBarcodes: (p.estrutura_grade || [])
+            .map((grade) => (grade.codigo_barras || "").trim())
+            .filter(Boolean),
+          link: (p.link || p.imagem_url || "").trim(),
           product: p.descricao,
           imageUrl: p.imagem_url,
           unidade: p.unidade,
@@ -133,7 +264,13 @@ const PeridoPercial = () => {
         {},
       );
 
-      setActiveOrder({ id: String(numero_pedido), items });
+      setActiveOrder({
+        id: String(numero_pedido),
+        idPedido: id_pedido,
+        totalItens: total_itens,
+        produtos,
+        items,
+      });
       setSeparationByItem(initialSeparation);
     } catch {
       setError(
@@ -184,17 +321,101 @@ const PeridoPercial = () => {
     setOrderNumber("");
     setError("");
     setSeparationByItem({});
+    setSelectedProductId(null);
   };
 
-  const handleSubmitPartialOrder = () => {
+  const handleSelectProduct = (itemId: string) => {
+    setSelectedProductId(itemId);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProductId(null);
+  };
+
+  const handlePrint = async () => {
+    if (!activeOrder) return;
+
+    try {
+      const response = await fetch(
+        `/api/relatorio/${activeOrder.id}/producao`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar relatório: ${response.status}`);
+      }
+
+      const html = await response.text();
+
+      const win = window.open("", "_blank", "width=900,height=700");
+      if (win) {
+        win.document.write(html);
+        win.document.close();
+      }
+    } catch (printError) {
+      toast({
+        title: "Erro ao gerar relatório",
+        description:
+          printError instanceof Error
+            ? printError.message
+            : "Não foi possível carregar o relatório de impressão.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSubmitPartialOrder = async () => {
     if (!activeOrder || totals.toSeparate <= 0) {
       return;
     }
 
-    toast({
-      title: "Pedido parcial lançado",
-      description: `Pedido #${activeOrder.id} com ${totals.toSeparate} item(ns) para separação.`,
-    });
+    const payload: PartialOrderPayload = {
+      numero_pedido: Number(activeOrder.id),
+      itens: activeOrder.items
+        .map((item) => ({
+          codigo_barras: item.codigoBarras,
+          estrutura_grade: item.gradeBarcodes.map((barcode) => ({
+            codigo_barras: barcode,
+          })),
+          quantidade_parcial: separationByItem[item.id] ?? 0,
+        }))
+        .filter((item) => item.quantidade_parcial > 0),
+    };
+
+    setSubmitting(true);
+
+    try {
+      const response = await postPartialOrder(payload);
+
+      if (!response.ok) {
+        throw new Error(await getApiErrorMessage(response));
+      }
+
+      setSeparationByItem(
+        activeOrder.items.reduce<Record<string, number>>((acc, item) => {
+          acc[item.id] = 0;
+          return acc;
+        }, {}),
+      );
+
+      toast({
+        title: "Pedido parcial lançado",
+        description: `Pedido #${activeOrder.id} enviado com ${payload.itens.length} item(ns).`,
+      });
+
+      // Aguarda um momento para o toast aparecer antes de iniciar a impressão
+      await handlePrint();
+    } catch (submissionError) {
+      toast({
+        title: "Erro ao lançar pedido parcial",
+        description:
+          submissionError instanceof Error
+            ? submissionError.message
+            : "Não foi possível enviar o pedido parcial.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!activeOrder) {
@@ -333,7 +554,11 @@ const PeridoPercial = () => {
             </TableHeader>
             <TableBody>
               {activeOrder.items.map((item) => (
-                <TableRow key={item.id}>
+                <TableRow
+                  key={item.id}
+                  onClick={() => handleSelectProduct(item.id)}
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
+                >
                   <TableCell>
                     <div className="h-14 w-14 overflow-hidden rounded-md border border-border bg-muted">
                       {item.imageUrl ? (
@@ -391,17 +616,196 @@ const PeridoPercial = () => {
             </TableBody>
           </Table>
 
-          <div className="px-4 py-3 border-t border-border bg-card flex justify-end">
+          <div className="px-4 py-3 border-t border-border bg-card flex justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={handlePrint}
+              disabled={totals.toSeparate <= 0}
+              className="min-w-36"
+            >
+              <Printer className="h-4 w-4 mr-2" />
+              Imprimir
+            </Button>
             <Button
               onClick={handleSubmitPartialOrder}
-              disabled={totals.toSeparate <= 0}
+              disabled={totals.toSeparate <= 0 || submitting}
               className="min-w-52"
             >
-              Lançar pedido parcial
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Enviando...
+                </>
+              ) : (
+                "Lançar pedido parcial"
+              )}
             </Button>
           </div>
         </motion.div>
       </main>
+
+      {selectedProduct && (
+        <Dialog
+          open={Boolean(selectedProductId)}
+          onOpenChange={handleCloseModal}
+        >
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="sticky top-0 bg-background pb-4 border-b">
+              <DialogTitle className="text-xl">
+                {selectedProduct.product}
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              {/* Imagem grande */}
+              {selectedProduct.imageUrl && (
+                <div className="flex justify-center">
+                  <img
+                    src={selectedProduct.imageUrl}
+                    alt={selectedProduct.product}
+                    className="max-h-96 max-w-full object-contain rounded-lg border border-border"
+                  />
+                </div>
+              )}
+
+              {/* Informações do produto */}
+              <div className="space-y-4 bg-muted/30 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Código</p>
+                    <p className="font-mono font-semibold text-foreground">
+                      {selectedProduct.codigo}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Código de Barras
+                    </p>
+                    <p className="font-mono font-semibold text-foreground">
+                      {selectedProduct.codigoBarras || "—"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Unidade
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {selectedProduct.unidade}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Fator de Grade
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {selectedProduct.gradeFactor || "—"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quantidades */}
+              <div className="space-y-4 bg-muted/30 p-4 rounded-lg">
+                <h3 className="font-semibold text-foreground">Quantidades</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Qtd no Pedido
+                    </p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedProduct.quantityInOrder}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Qtd Total
+                    </p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedProduct.quantityTotal}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Qtd para Separar
+                    </p>
+                    <p className="text-2xl font-bold text-primary">
+                      {separationByItem[selectedProduct.id] ?? 0}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Editar quantidade para separar */}
+              <div className="space-y-3 bg-muted/30 p-4 rounded-lg">
+                <label className="text-sm font-semibold text-foreground">
+                  Ajustar quantidade para separação
+                </label>
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1">
+                    <Input
+                      type="number"
+                      min={0}
+                      max={selectedProduct.quantityTotal}
+                      value={separationByItem[selectedProduct.id] ?? 0}
+                      onChange={(event) =>
+                        handleChangeSeparation(
+                          selectedProduct.id,
+                          selectedProduct.quantityTotal,
+                          event.target.value,
+                        )
+                      }
+                      className="font-mono text-lg h-12 bg-background border-border"
+                    />
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      handleChangeSeparation(
+                        selectedProduct.id,
+                        selectedProduct.quantityTotal,
+                        String(selectedProduct.quantityTotal),
+                      )
+                    }
+                    className="h-12"
+                  >
+                    Max
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      handleChangeSeparation(
+                        selectedProduct.id,
+                        selectedProduct.quantityTotal,
+                        "0",
+                      )
+                    }
+                    className="h-12"
+                  >
+                    Limpar
+                  </Button>
+                </div>
+              </div>
+
+              {/* Link do produto */}
+              {selectedProduct.link && (
+                <div className="space-y-2 bg-muted/30 p-4 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    Link do Produto
+                  </p>
+                  <a
+                    href={selectedProduct.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline truncate break-all"
+                  >
+                    {selectedProduct.link}
+                  </a>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import PeridoPercial from "./pages/PeridoPercial.tsx";
+import AdministradorExpedicao from "./pages/AdministradorExpedicao.tsx";
+import Login from "./pages/Login.tsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -16,8 +19,31 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/pedidoparcial" element={<PeridoPercial />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Index />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/administradorExpedicao"
+            element={
+              <ProtectedRoute>
+                <AdministradorExpedicao />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pedidoparcial"
+            element={
+              <ProtectedRoute>
+                <PeridoPercial />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/peridopercial"
             element={<Navigate to="/pedidoparcial" replace />}

@@ -1,0 +1,1342 @@
+<html>
+  <head>
+    <title>Bling - Ordem de Produção</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.bling.com.br/styles/print-1774996096.css"
+    />
+    <script
+      src="https://www.bling.com.br/libs/jquery-1.9.1.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://www.bling.com.br/libs/jmenu_compressed.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://www.bling.com.br/libs/jquery.boxy.js"
+      type="text/javascript"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/i18next.min-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/i18nextChainedBackend.min-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/i18nextHttpBackend.min-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/i18nextLocalStorageBackend.min-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/loc-i18next.min-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/js/i18n/numberParser-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/templates/components/i18n/i18n-1774996096.js"
+    ></script>
+    <script type="text/javascript">
+      i18n.init("pt_BR", "", "");
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/utils-1774996096.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/templates/object.print-1774996096.js"
+    ></script>
+    <script type="text/javascript">
+      var xajaxRequestUri =
+        "https://www.bling.com.br/services/vendas.server.php";
+      var xajaxDebug = false;
+      var xajaxStatusMessages = false;
+      var xajaxWaitCursor = true;
+      var xajaxDefinedGet = 0;
+      var xajaxDefinedPost = 1;
+      var xajaxLoaded = false;
+      function xajax_adicionarOcorrenciaVenda() {
+        return xajax.call(
+          "#services\\vendas\\#adicionarOcorrenciaVenda",
+          arguments,
+          1,
+        );
+      }
+      function xajax_alterarSituacaoVenda() {
+        return xajax.call(
+          "#services\\vendas\\#alterarSituacaoVenda",
+          arguments,
+          1,
+        );
+      }
+      function xajax_buscarDadosContato() {
+        return xajax.call(
+          "#services\\vendas\\#buscarDadosContato",
+          arguments,
+          1,
+        );
+      }
+      function xajax_buscarDadosProduto() {
+        return xajax.call(
+          "#services\\vendas\\#buscarDadosProduto",
+          arguments,
+          1,
+        );
+      }
+      function xajax_buscarPrecoLojaProduto() {
+        return xajax.call(
+          "#services\\vendas\\#buscarPrecoLojaProduto",
+          arguments,
+          1,
+        );
+      }
+      function xajax_buscarValor() {
+        return xajax.call("#services\\vendas\\#buscarValor", arguments, 1);
+      }
+      function xajax_buscaStatusLoja() {
+        return xajax.call("#services\\vendas\\#buscaStatusLoja", arguments, 1);
+      }
+      function xajax_carregarDadosComissaoVendedor() {
+        return xajax.call(
+          "#services\\vendas\\#carregarDadosComissaoVendedor",
+          arguments,
+          1,
+        );
+      }
+      function xajax_carregarFiltroLojas() {
+        return xajax.call(
+          "#services\\vendas\\#carregarFiltroLojas",
+          arguments,
+          1,
+        );
+      }
+      function xajax_carregarTransicoes() {
+        return xajax.call(
+          "#services\\vendas\\#carregarTransicoes",
+          arguments,
+          1,
+        );
+      }
+      function xajax_enviaMensagemMercadoLivre() {
+        return xajax.call(
+          "#services\\vendas\\#enviaMensagemMercadoLivre",
+          arguments,
+          1,
+        );
+      }
+      function xajax_enviarFaturas() {
+        return xajax.call("#services\\vendas\\#enviarFaturas", arguments, 1);
+      }
+      function xajax_excluirLancamentoEstoque() {
+        return xajax.call(
+          "#services\\vendas\\#excluirLancamentoEstoque",
+          arguments,
+          1,
+        );
+      }
+      function xajax_executaImportacaoViaCronManualmente() {
+        return xajax.call(
+          "#services\\vendas\\#executaImportacaoViaCronManualmente",
+          arguments,
+          1,
+        );
+      }
+      function xajax_exportarContatosSIGEPWeb() {
+        return xajax.call(
+          "#services\\vendas\\#exportarContatosSIGEPWeb",
+          arguments,
+          1,
+        );
+      }
+      function xajax_faturarVariosPedidos() {
+        return xajax.call(
+          "#services\\vendas\\#faturarVariosPedidos",
+          arguments,
+          1,
+        );
+      }
+      function xajax_gerarBoletoFatura() {
+        return xajax.call(
+          "#services\\vendas\\#gerarBoletoFatura",
+          arguments,
+          1,
+        );
+      }
+      function xajax_gerarCarne() {
+        return xajax.call("#services\\vendas\\#gerarCarne", arguments, 1);
+      }
+      function xajax_gerarOrdensProducao() {
+        return xajax.call(
+          "#services\\vendas\\#gerarOrdensProducao",
+          arguments,
+          1,
+        );
+      }
+      function xajax_geraTxtIntegracao() {
+        return xajax.call(
+          "#services\\vendas\\#geraTxtIntegracao",
+          arguments,
+          1,
+        );
+      }
+      function xajax_getDynamicFilters() {
+        return xajax.call(
+          "#services\\vendas\\#getDynamicFilters",
+          arguments,
+          1,
+        );
+      }
+      function xajax_getOrdensByIdVenda() {
+        return xajax.call(
+          "#services\\vendas\\#getOrdensByIdVenda",
+          arguments,
+          1,
+        );
+      }
+      function xajax_getPermissions() {
+        return xajax.call("#services\\vendas\\#getPermissions", arguments, 1);
+      }
+      function xajax_getValorTaxaPaga() {
+        return xajax.call("#services\\vendas\\#getValorTaxaPaga", arguments, 1);
+      }
+      function xajax_importOrderByForm() {
+        return xajax.call(
+          "#services\\vendas\\#importOrderByForm",
+          arguments,
+          1,
+        );
+      }
+      function xajax_imprimir() {
+        return xajax.call("#services\\vendas\\#imprimir", arguments, 1);
+      }
+      function xajax_imprimirCamposEspecificos() {
+        return xajax.call(
+          "#services\\vendas\\#imprimirCamposEspecificos",
+          arguments,
+          1,
+        );
+      }
+      function xajax_imprimirOrdemDeProducao() {
+        return xajax.call(
+          "#services\\vendas\\#imprimirOrdemDeProducao",
+          arguments,
+          1,
+        );
+      }
+      function xajax_imprimirVenda() {
+        return xajax.call("#services\\vendas\\#imprimirVenda", arguments, 1);
+      }
+      function xajax_incluirVenda() {
+        return xajax.call("#services\\vendas\\#incluirVenda", arguments, 1);
+      }
+      function xajax_iniciarEnvioFaturas() {
+        return xajax.call(
+          "#services\\vendas\\#iniciarEnvioFaturas",
+          arguments,
+          1,
+        );
+      }
+      function xajax_iniciarExportarEnderecosPlanilha() {
+        return xajax.call(
+          "#services\\vendas\\#iniciarExportarEnderecosPlanilha",
+          arguments,
+          1,
+        );
+      }
+      function xajax_lancarContasVendaTela() {
+        return xajax.call(
+          "#services\\vendas\\#lancarContasVendaTela",
+          arguments,
+          1,
+        );
+      }
+      function xajax_lancarEstoques() {
+        return xajax.call("#services\\vendas\\#lancarEstoques", arguments, 1);
+      }
+      function xajax_limparAvisos() {
+        return xajax.call("#services\\vendas\\#limparAvisos", arguments, 1);
+      }
+      function xajax_listarOcorrenciasDaVenda() {
+        return xajax.call(
+          "#services\\vendas\\#listarOcorrenciasDaVenda",
+          arguments,
+          1,
+        );
+      }
+      function xajax_listarVendas() {
+        return xajax.call("#services\\vendas\\#listarVendas", arguments, 1);
+      }
+      function xajax_obterVendaFaturamentoParcial() {
+        return xajax.call(
+          "#services\\vendas\\#obterVendaFaturamentoParcial",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterResumoVendaFaturamentoParcial() {
+        return xajax.call(
+          "#services\\vendas\\#obterResumoVendaFaturamentoParcial",
+          arguments,
+          1,
+        );
+      }
+      function xajax_pedidoVendaTotalmenteFaturado() {
+        return xajax.call(
+          "#services\\vendas\\#pedidoVendaTotalmenteFaturado",
+          arguments,
+          1,
+        );
+      }
+      function xajax_montarEtiquetasVenda() {
+        return xajax.call(
+          "#services\\vendas\\#montarEtiquetasVenda",
+          arguments,
+          1,
+        );
+      }
+      function xajax_mudarSituacaoVendasSelecionadas() {
+        return xajax.call(
+          "#services\\vendas\\#mudarSituacaoVendasSelecionadas",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterConfiguracoesVendas() {
+        return xajax.call(
+          "#services\\vendas\\#obterConfiguracoesVendas",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterDadosContatoMensagemMercadoLivre() {
+        return xajax.call(
+          "#services\\vendas\\#obterDadosContatoMensagemMercadoLivre",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterEstruturaDoProduto() {
+        return xajax.call(
+          "#services\\vendas\\#obterEstruturaDoProduto",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterListaParaExportacao() {
+        return xajax.call(
+          "#services\\vendas\\#obterListaParaExportacao",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterParametrosVendas() {
+        return xajax.call(
+          "#services\\vendas\\#obterParametrosVendas",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterPedidoVendaXML() {
+        return xajax.call(
+          "#services\\vendas\\#obterPedidoVendaXML",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterVenda() {
+        return xajax.call("#services\\vendas\\#obterVenda", arguments, 1);
+      }
+      function xajax_obterVendaOld() {
+        return xajax.call("#services\\vendas\\#obterVendaOld", arguments, 1);
+      }
+      function xajax_obterMensagensIntegracoes() {
+        return xajax.call(
+          "#services\\vendas\\#obterMensagensIntegracoes",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterVendaPorOrcamento() {
+        return xajax.call(
+          "#services\\vendas\\#obterVendaPorOrcamento",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterVendaPorOrcamentoOld() {
+        return xajax.call(
+          "#services\\vendas\\#obterVendaPorOrcamentoOld",
+          arguments,
+          1,
+        );
+      }
+      function xajax_opcoesEnvioDadosMl() {
+        return xajax.call(
+          "#services\\vendas\\#opcoesEnvioDadosMl",
+          arguments,
+          1,
+        );
+      }
+      function xajax_removeDetailOcorrencia() {
+        return xajax.call(
+          "#services\\vendas\\#removeDetailOcorrencia",
+          arguments,
+          1,
+        );
+      }
+      function xajax_salvarOpcoesFatura() {
+        return xajax.call(
+          "#services\\vendas\\#salvarOpcoesFatura",
+          arguments,
+          1,
+        );
+      }
+      function xajax_salvarVenda() {
+        return xajax.call("#services\\vendas\\#salvarVenda", arguments, 1);
+      }
+      function xajax_setarPrimeiraCompra() {
+        return xajax.call("setarPrimeiraCompra", arguments, 1);
+      }
+      function xajax_validarFaturaBoleto() {
+        return xajax.call(
+          "#services\\vendas\\#validarFaturaBoleto",
+          arguments,
+          1,
+        );
+      }
+      function xajax_validarFaturaNfse() {
+        return xajax.call(
+          "#services\\vendas\\#validarFaturaNfse",
+          arguments,
+          1,
+        );
+      }
+      function xajax_validarLimiteDescontoGeralVendedor() {
+        return xajax.call(
+          "#services\\vendas\\#validarLimiteDescontoGeralVendedor",
+          arguments,
+          1,
+        );
+      }
+      function xajax_validarLimiteDescontoVendedor() {
+        return xajax.call(
+          "#services\\vendas\\#validarLimiteDescontoVendedor",
+          arguments,
+          1,
+        );
+      }
+      function xajax_verificaLancarEstoque() {
+        return xajax.call(
+          "#services\\vendas\\#verificaLancarEstoque",
+          arguments,
+          1,
+        );
+      }
+      function xajax_verificarPassoEncerramento() {
+        return xajax.call(
+          "#services\\vendas\\#verificarPassoEncerramento",
+          arguments,
+          1,
+        );
+      }
+      function xajax_atualizarVendaPorRetornoCallback() {
+        return xajax.call("atualizarVendaPorRetornoCallback", arguments, 1);
+      }
+      function xajax_buscarDadosContatoRapido() {
+        return xajax.call("buscarDadosContatoRapido", arguments, 1);
+      }
+      function xajax_buscarDadosEstoqueProdutoArray() {
+        return xajax.call("buscarDadosEstoqueProdutoArray", arguments, 1);
+      }
+      function xajax_buscarDadosProdutosLogistica() {
+        return xajax.call("buscarDadosProdutosLogistica", arguments, 1);
+      }
+      function xajax_buscarInfoEstoqueProdutos() {
+        return xajax.call("buscarInfoEstoqueProdutos", arguments, 1);
+      }
+      function xajax_buscarLogoAtivas() {
+        return xajax.call("buscarLogoAtivas", arguments, 1);
+      }
+      function xajax_carregarLojasIntegradasArray() {
+        return xajax.call("carregarLojasIntegradasArray", arguments, 1);
+      }
+      function xajax_carregarSituacoes() {
+        return xajax.call("carregarSituacoes", arguments, 1);
+      }
+      function xajax_consultarCotacoes() {
+        return xajax.call("consultarCotacoes", arguments, 1);
+      }
+      function xajax_consultarPontosRetirada() {
+        return xajax.call("consultarPontosRetirada", arguments, 1);
+      }
+      function xajax_enviarDadosFeedback() {
+        return xajax.call("enviarDadosFeedback", arguments, 1);
+      }
+      function xajax_enviarDadosLojaVirtual() {
+        return xajax.call("enviarDadosLojaVirtual", arguments, 1);
+      }
+      function xajax_enviarDocumentoWhatsapp() {
+        return xajax.call("enviarDocumentoWhatsapp", arguments, 1);
+      }
+      function xajax_enviarEmailRastreioCliente() {
+        return xajax.call("enviarEmailRastreioCliente", arguments, 1);
+      }
+      function xajax_gerarComprovanteNaoFiscal() {
+        return xajax.call("gerarComprovanteNaoFiscal", arguments, 1);
+      }
+      function xajax_gerarDocumentoCompartilhado() {
+        return xajax.call("gerarDocumentoCompartilhado", arguments, 1);
+      }
+      function xajax_gerarSat() {
+        return xajax.call("gerarSat", arguments, 1);
+      }
+      function xajax_getFormasPagamento() {
+        return xajax.call("getFormasPagamento", arguments, 1);
+      }
+      function xajax_imprimirAr() {
+        return xajax.call("imprimirAr", arguments, 1);
+      }
+      function xajax_imprimirDeclaracaoConteudo() {
+        return xajax.call("imprimirDeclaracaoConteudo", arguments, 1);
+      }
+      function xajax_imprimirRotuloExterno() {
+        return xajax.call("imprimirRotuloExterno", arguments, 1);
+      }
+      function xajax_imprimirLoteRotuloExterno() {
+        return xajax.call("imprimirLoteRotuloExterno", arguments, 1);
+      }
+      function xajax_getObjectIdsByOrigin() {
+        return xajax.call("getObjectIdsByOrigin", arguments, 1);
+      }
+      function xajax_listarLojasVirtuaisAtivas() {
+        return xajax.call("listarLojasVirtuaisAtivas", arguments, 1);
+      }
+      function xajax_listarUnidadesDeNegocio() {
+        return xajax.call("listarUnidadesDeNegocio", arguments, 1);
+      }
+      function xajax_obterDadosProduto() {
+        return xajax.call("obterDadosProduto", arguments, 1);
+      }
+      function xajax_obterDadosRastroObjeto() {
+        return xajax.call("obterDadosRastroObjeto", arguments, 1);
+      }
+      function xajax_obterEmbalagem() {
+        return xajax.call("obterEmbalagem", arguments, 1);
+      }
+      function xajax_obterEmbalagens() {
+        return xajax.call("obterEmbalagens", arguments, 1);
+      }
+      function xajax_obterEstoqueProdutos() {
+        return xajax.call("obterEstoqueProdutos", arguments, 1);
+      }
+      function xajax_obterListaContatos() {
+        return xajax.call("obterListaContatos", arguments, 1);
+      }
+      function xajax_obterListaEstoquePorUnidadeDeNegocio() {
+        return xajax.call("obterListaEstoquePorUnidadeDeNegocio", arguments, 1);
+      }
+      function xajax_obterListasPrecos() {
+        return xajax.call("obterListasPrecos", arguments, 1);
+      }
+      function xajax_obterOpcoesDepositos() {
+        return xajax.call("obterOpcoesDepositos", arguments, 1);
+      }
+      function xajax_obterProdutoPorGtin() {
+        return xajax.call("obterProdutoPorGtin", arguments, 1);
+      }
+      function xajax_obterRastreamentosOrigem() {
+        return xajax.call("obterRastreamentosOrigem", arguments, 1);
+      }
+      function xajax_obterRequisitosCotacoes() {
+        return xajax.call("obterRequisitosCotacoes", arguments, 1);
+      }
+      function xajax_checarAvisoLogistica() {
+        return xajax.call("checarAvisoLogistica", arguments, 1);
+      }
+      function xajax_obterServicosLogistica() {
+        return xajax.call("obterServicosLogistica", arguments, 1);
+      }
+      function xajax_obterTiposContatos() {
+        return xajax.call("obterTiposContatos", arguments, 1);
+      }
+      function xajax_obterUrlArquivoSat() {
+        return xajax.call("obterUrlArquivoSat", arguments, 1);
+      }
+      function xajax_obterVencimentoParcelas() {
+        return xajax.call("obterVencimentoParcelas", arguments, 1);
+      }
+      function xajax_sincronizarRastroObjeto() {
+        return xajax.call("sincronizarRastroObjeto", arguments, 1);
+      }
+      function xajax_validarDisponibilidadeServicoTela() {
+        return xajax.call("validarDisponibilidadeServicoTela", arguments, 1);
+      }
+      function xajax_checkOrderHasFulfillment() {
+        return xajax.call(
+          "#services\\vendas\\#checkOrderHasFulfillment",
+          arguments,
+          1,
+        );
+      }
+      function xajax_checkOrderHasFulfillmentDeposit() {
+        return xajax.call(
+          "#services\\vendas\\#checkOrderHasFulfillmentDeposit",
+          arguments,
+          1,
+        );
+      }
+      function xajax_verificarVendaParcelaDestinoContasReceber() {
+        return xajax.call(
+          "#services\\vendas\\#verificarVendaParcelaDestinoContasReceber",
+          arguments,
+          1,
+        );
+      }
+      function xajax_salvarParametrosAutoLancamentoContasReceber() {
+        return xajax.call(
+          "#services\\vendas\\#salvarParametrosAutoLancamentoContasReceber",
+          arguments,
+          1,
+        );
+      }
+      function xajax_verificarMostraModalLancamentoAutomatico() {
+        return xajax.call(
+          "#services\\vendas\\#verificarMostraModalLancamentoAutomatico",
+          arguments,
+          1,
+        );
+      }
+      function xajax_salvarParametrosLancamentoAutomatico() {
+        return xajax.call(
+          "#services\\vendas\\#salvarParametrosLancamentoAutomatico",
+          arguments,
+          1,
+        );
+      }
+      function xajax_obterListasPrecoVendedor() {
+        return xajax.call("obterListasPrecoVendedor", arguments, 1);
+      }
+      function xajax_autoCompletarContato() {
+        return xajax.call("autoCompletarContato", arguments, 1);
+      }
+      function xajax_pesquisarContatos() {
+        return xajax.call("pesquisarContatos", arguments, 1);
+      }
+      function xajax_consultarHistoricoVendasDoCliente() {
+        return xajax.call("consultarHistoricoVendasDoCliente", arguments, 1);
+      }
+      function xajax_consultarHistoricoFinanceiroDoCliente() {
+        return xajax.call(
+          "consultarHistoricoFinanceiroDoCliente",
+          arguments,
+          1,
+        );
+      }
+      function xajax_buscarAutoCompletarContato() {
+        return xajax.call("buscarAutoCompletarContato", arguments, 1);
+      }
+      function xajax_salvarContatoRapido() {
+        return xajax.call("salvarContatoRapido", arguments, 1);
+      }
+      function xajax_buscarPessoasContato() {
+        return xajax.call("buscarPessoasContato", arguments, 1);
+      }
+      function xajax_consultarCadastroContribuinteContato() {
+        return xajax.call("consultarCadastroContribuinteContato", arguments, 1);
+      }
+      function xajax_obterDadosDoDestinatario() {
+        return xajax.call("obterDadosDoDestinatario", arguments, 1);
+      }
+      function xajax_compartilharDocumentoXajax() {
+        return xajax.call("compartilharDocumentoXajax", arguments, 1);
+      }
+      function xajax_geraAnexosProposta() {
+        return xajax.call("geraAnexosProposta", arguments, 1);
+      }
+      function xajax_obterLinkCompartilhado() {
+        return xajax.call("obterLinkCompartilhado", arguments, 1);
+      }
+      function xajax_regenerarLinkCompartilhado() {
+        return xajax.call("regenerarLinkCompartilhado", arguments, 1);
+      }
+      function xajax_regenerarLinkCompartilhadoCallback() {
+        return xajax.call("regenerarLinkCompartilhadoCallback", arguments, 1);
+      }
+      function xajax_gerarEtiquetas() {
+        return xajax.call("gerarEtiquetas", arguments, 1);
+      }
+      function xajax_gerarEtiquetasVendas() {
+        return xajax.call("gerarEtiquetasVendas", arguments, 1);
+      }
+      function xajax_autoCompletarProduto() {
+        return xajax.call("autoCompletarProduto", arguments, 1);
+      }
+      function xajax_autoCompletarProdutoArray() {
+        return xajax.call("autoCompletarProdutoArray", arguments, 1);
+      }
+      function xajax_pesquisarProdutos() {
+        return xajax.call("pesquisarProdutos", arguments, 1);
+      }
+      function xajax_consultarHistoricoProdutoCliente() {
+        return xajax.call("consultarHistoricoProdutoCliente", arguments, 1);
+      }
+      function xajax_procurarNoHistoricoPorEsteProduto() {
+        return xajax.call("procurarNoHistoricoPorEsteProduto", arguments, 1);
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.bling.com.br/libs/xajax-1774996096.js"
+    ></script>
+    <script type="text/javascript">
+      window.setTimeout(function () {
+        if (!xajaxLoaded) {
+          alert(
+            "Error: the xajax Javascript file could not be included. Perhaps the URL is incorrect?\nURL: https://www.bling.com.br/libs/xajax-1774996096.js",
+          );
+        }
+      }, 6000);
+    </script>
+    <script type="text/javascript">
+      function Print() {
+        document.body.offsetHeight;
+        window.print();
+      }
+    </script>
+  </head>
+  <body style="cursor: default">
+    <div id="error-messages" style="display: none"></div>
+    <div id="content-area">
+      <div id="slot_ordem_producao">
+        <div style="width: 700px; text-align: center">
+          <div id="content">
+            <div id="headerHTML">
+              <table width="100%">
+                <tbody>
+                  <tr>
+                    <td align="left">
+                      <img
+                        src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2NjIpLCBxdWFsaXR5ID0gODAK/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg8MEBcUGBgXFBYWGh0lHxobIxwWFiAsICMmJykqKRkfLTAtKDAlKCko/9sAQwEHBwcKCAoTCgoTKBoWGigoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo/8AAEQgAOAB4AwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8A+qaKKKAK1hfQX8bPbsSqnacjHNWa57wX/wAeNx/11/oK6GscPUdSmpvdlzioyaRyfjX4gaB4M1DR7LXp5op9VkaK1EcLOGYFQckdOXWtfVdfsNLuFhvHdZCocAITxkj+lZ/i2PRXvdLOs6NZ6jMHP2eS4gSQwHK5Klgcc7enoK3bixtLlw9zawTOBgNJGGOPTmic3K8abV13BJKzlsYZ8aaMOs0v/fo0w+ONEHWaX/v0a2f7I03/AKB9n/34X/CuS8ZyWULppGk6baPqVx8pKQLmMH8OD/Ic1zVp4ilHmlJfc/8AM1hGnN2SZ0ei+I9O1m4eCxkdpEXedyFeM4/rTtd8QWGhmEahI6ednZtQtnGM9PqKj8K6DDoWnCJcNcPhppP7x9B7CtK7sbS92/bLWC42Z2+bGHxnrjNbw9s6WtlL8DN8inpsc0fiDoA6zzf9+Wpp+Inh4f8ALxN/35at7+wtI/6Bdh/4Dp/hSf2Do/8A0CtP/wDAZP8ACs+XFfzR+5/5lXpdmSaLqtrrNgt5YszQMSoLKVOQcHir1RWttBaQiK1higiByEjQKo/AVLXVHmsubcydr6BRRRVCCiiigDnfBJzZXI7+b/QV0VcnOtx4d1KW4iiaWwmOWC/w/wCGKtSeL9NWLcBOz/3NnP8APFcFCvCjD2dR2aNpwc3zR1uUvHJzqOiqOvmHj/gSV19cfpdrd65rUeq38RhtYcGGM98dP15zXT6ldrYWE91IpZYlLbR1PtV4d3c6z0T/ACS3CotIw6mZ4r11NFsfkAe8l+WGPrz6n2FVPB2gvYq+oalmTU7n5mLclAe319fyri7TX0/t2TVNVtpLmYf6pFOFj9Ovp2/Ot9viNAP+YbP/AN9j/CuWGLo1KntKkrW2X6+pq6M4x5Yr1O8rzr4r+Y99ocEcrxea7oSp9Sgz+tTH4lW4/wCYZcf99j/CuW8XeK49bvtLnjs5YhZuXIZs7slT/wCy0Y3GUalFxjLXTv3HQozjNNo6M/DWU/8AMeuP+/R/+KrpvCHh5vD1vcRPfSXnmuG3Ou3bgYx1NcwfilbD/mFXP/fwf4U3/halt/0Cbn/v4P8ACinVwNKXNB6/MJQxE1Zr8j0iivN/iZ8VLbwJZ+HZ59Kub0ayxCrFIF8rhDzkc/f/AEr0ivVTuro49gooopgFFFFABUItbdX3CCIN1yEGa8Wt/E2s6V8LorPW9QuHvrzS4bzTNU3lZJ9yozxM3/PVMnnqyc8kNXt9JpPcLhRXKfE/xD/wjfhC6uYZhDe3LLZ2jlS22WQ7Q+ByQgy5Hohqh8Jdfj1TSb7TDqE2o3GkXBt/tU4bzLiFvmhkbcASSp2k92RjTA7qiiuVgu7g/FS9szPKbRdFgmWHcdgczzAtjpkgAZ9hQB1VFFcvrt3cRePPC1tFPIlvPFeGWNWIVyqx7cjvjJx9aAOoooooAKK8gjt7nw+UuvGA8SwXaXAaTXrLU3mtGBl43QF8RoQQCpiKqD97I3V6/QAUUUUAFFFFAGHqHhPRNR8OW2g31gk2lWyxLDCzN+7EeNmGzuBGBznPXPU1uUUUAU7vS7O81CwvbmHzLmxZ3t2LHEbOpVjjOCdpIyRwCcdTSLpdmusvqyw41B4FtXlDEbo1YsqkZwcFmwcZGT60UUAXaprplousSaqIsX8kC2rS7jzGrMwXGcdWY5xnmiigC5WN4g8Nabr8tpLqC3YmtN/ky2t7NbOm4AMN0TqSDgcH0oooAsaJo9to1vJDZyX0iO28m7vZrps4xw0rsQOOgOK0aKKAOSHw90EFI9l/9gRxIunG/nNoCDuA8ndt2ggHZjbx0rraKKACiiigD//Z"
+                        style="border: none"
+                      />
+                    </td>
+                    <td style="text-align: right">
+                      UZE NAILS COSMETICOS LTDA - (91) 99130-3454<br />Rua
+                      Ricardo Fracassi, N° 610, CONJ 12<br />13456141 - Santa
+                      Bárbara D'Oeste, SP<br />CNPJ: 56.992.238/0001-03, IE:
+                      606.489.726.113<br />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <h2>Relatório de produção Nº 15592</h2>
+              <span
+                ><!--?xml version="1.0" standalone="no"?-->
+
+                <svg
+                  width="118.5"
+                  height="50"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <desc>15592</desc>
+                  <g id="bars" fill="black" stroke="none">
+                    <rect x="0" y="0" width="3" height="50"></rect>
+                    <rect x="4.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="9" y="0" width="4.5" height="50"></rect>
+                    <rect x="16.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="19.5" y="0" width="4.5" height="50"></rect>
+                    <rect x="27" y="0" width="3" height="50"></rect>
+                    <rect x="33" y="0" width="4.5" height="50"></rect>
+                    <rect x="42" y="0" width="3" height="50"></rect>
+                    <rect x="46.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="49.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="52.5" y="0" width="6" height="50"></rect>
+                    <rect x="60" y="0" width="4.5" height="50"></rect>
+                    <rect x="66" y="0" width="3" height="50"></rect>
+                    <rect x="72" y="0" width="4.5" height="50"></rect>
+                    <rect x="79.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="82.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="85.5" y="0" width="6" height="50"></rect>
+                    <rect x="93" y="0" width="1.5" height="50"></rect>
+                    <rect x="99" y="0" width="3" height="50"></rect>
+                    <rect x="106.5" y="0" width="4.5" height="50"></rect>
+                    <rect x="112.5" y="0" width="1.5" height="50"></rect>
+                    <rect x="115.5" y="0" width="3" height="50"></rect>
+                    <rect x="118.5" y="0" width="0" height="50"></rect>
+                    <rect x="118.5" y="0" width="0" height="50"></rect>
+                  </g>
+                </svg>
+              </span>
+            </div>
+            <div id="contentHTML">
+              <div class="center">
+                <h4>Cliente</h4>
+                <table style="text-align: left; width: 100%">
+                  <tbody>
+                    <tr>
+                      <td width="70%">
+                        <div class="divBorda">
+                          NSM COMERCIO E ATACADO LTDA<br />SHOPPING DAS UNHAS -
+                          CENTRO DE DISTRIBUICAO<br />29962916000104<br />AV
+                          PROFESSOR JOAO GOMES MONTEIRO SOBRINHO, Nº 452, .
+                          Bairro: LIXEIRA. <br />78008800 - Cuiabá, MT<br />(65)
+                          98172-9682, (65) 98172-9682, SHU.COMPRAS@GMAIL.COM
+                        </div>
+                      </td>
+                      <td width="20px"></td>
+                      <td>
+                        <table class="gridH">
+                          <tbody>
+                            <tr>
+                              <th>Número do pedido</th>
+                              <td>15592</td>
+                            </tr>
+                            <tr>
+                              <th>Data</th>
+                              <td>01/04/2026</td>
+                            </tr>
+                            <tr>
+                              <th>Data prevista</th>
+                              <td>09/04/2026&nbsp;</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style="width: 49%; text-align: left">
+                  <h4>Loja</h4>
+                  <div class="divBorda">3 - Uze Nails SP</div>
+                </div>
+                <h4>Itens do pedido de venda</h4>
+                <table class="grid">
+                  <tbody>
+                    <tr>
+                      <th>Descrição do produto/serviço</th>
+                      <th>Código</th>
+                      <th>Unidade</th>
+                      <th>Qtd Total</th>
+                      <th>Localização</th>
+                      <th>Tag</th>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - CAPA BASE CLEAR 12ML UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200151
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        5,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Capa Base Clear 12ml Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200007</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        60,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - TOP COAT CLEAR DIAMOND 12ML UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200153
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        4,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Top Coat Clear Diamond 12ml Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200021</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        48,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - GEL CONSTRUTOR NATURAL NUDE 25G UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200123
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        3,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Gel Construtor Natural Nude 25g Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200013</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        36,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - GEL CONSTRUTOR NATURAL ELEGANTE COVER 25G
+                        UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200125
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        2,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Gel Construtor Natural Elegante Cover 25g Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200012</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        24,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - GEL CONSTRUTOR NATURAL CLEAR 25G UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200118
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        1,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Gel Construtor Natural Clear 25g Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200018</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        12,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - GEL CONSTRUTOR NATURAL BABY WHITE 25G UZE
+                        NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200119
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        2,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Gel Construtor Natural Baby White 25g Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200017</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        24,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - PREP 120ML UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200117
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        4,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        Prep 120ml Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200001</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        48,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - 2 ADESIVADOR 12ML UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200150
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        4,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        2 Adesivador 12ml Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200005</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        48,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 35%; padding-top: 10px">
+                        GRADE C/12 - 1 PRIMER ACIDO 12ML UZE NAILS
+                      </td>
+                      <td
+                        style="
+                          width: 20%;
+                          padding-top: 10px;
+                          word-break: break-all;
+                        "
+                      >
+                        200149
+                      </td>
+                      <td style="width: 8%; padding-top: 10px">PCT</td>
+                      <td style="width: 12%; padding-top: 10px" class="right">
+                        2,00000
+                      </td>
+                      <td style="width: 13%; padding-top: 10px">&nbsp;</td>
+                      <td style="width: 10%; padding-top: 10px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="
+                          padding-left: 40px;
+                          border-top: 1px dotted #bbbbbb;
+                        "
+                      >
+                        1 Primer Ácido 12ml Uze Nails
+                      </td>
+                      <td style="border-top: 1px dotted #bbbbbb">200004</td>
+                      <td style="border-top: 1px dotted #bbbbbb">UN</td>
+                      <td style="border-top: 1px dotted #bbbbbb" class="right">
+                        24,00000
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      >
+                        &nbsp;
+                      </td>
+                      <td
+                        style="border-top: 1px dotted #bbbbbb; text-align: left"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td
+                        colspan="5"
+                        style="
+                          text-align: right;
+                          padding: 10px 5px;
+                          font-weight: bold;
+                          border-bottom: 0;
+                        "
+                      >
+                        Nº de itens<br />Soma das Qtdes<br />Nº de itens das
+                        estruturas<br />Soma das Qtdes das estruturas
+                      </td>
+                      <td style="text-align: right">
+                        9,00<br />27,00000<br />9,00<br />324,00000
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+                <h4>Observações</h4>
+                <table width="100%" class="divBorda" style="text-align: left">
+                  <tbody>
+                    <tr>
+                      <td>Aos cuidados de: LARISSA</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h4>Observações Internas</h4>
+                <table width="100%" class="divBorda" style="text-align: left">
+                  <tbody>
+                    <tr>
+                      <td>
+                        SAIDA CD SP<br />
+                        NOTA BAIXA (1/4)<br />
+                        BRASPRESS<br />
+                        PEDIDO 15840<br />
+                        ==============<br />
+                        <br />
+                        PAGAMENTO CONFIRMADO POR ALEX<br />
+                        PGTO VIA PAGARME EM 01.04.26<br />
+                        ----<br />
+                        PEDIDO EM SEPARAÇÃO PARCIAL 09/04 09:32 - LUIZA<br />
+                        CAPA BASE CLEAR <br />
+                        GEL NUDE<br />
+                        NATURAL CLEAR<br />
+                        BABY WHITE<br />
+                        PREP 120ML<br />
+                        ADESIVADOR <br />
+                        PRIMER ACIDO<br />
+                        EMB. 09/04 15:26 - MONIZE<br />
+                        2 VOL DE Nº 05 = 26,,800<br />
+                        1 VOL DE Nº 02 = 6,100<br />
+                        ---<br />
+                        CLEAR DIAMOND (PENDENTE)<br />
+                        ELEGANTE COVER (PENDENTE)<br />
+                        <br />
+                        <br />
+                        FATURADO (NF BAIXA/PARCIAL) Nº 3006 + GUIA<br />
+                        LIB.IMP. ETIQ. E ENVIEI GUIA ST- DAINATA 09/04 AS
+                        15:42<br />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var idPedidoVenda = "25455091663";
+      var imprimeOrdemProducao = "I";
+      var ocultarItensTerceiros = "N";
+
+      xajax_imprimirOrdemDeProducao(
+        idPedidoVenda,
+        imprimeOrdemProducao,
+        ocultarItensTerceiros,
+        function (result) {
+          $("#slot_ordem_producao").html(result.content);
+          format();
+          setTimeout(function () {
+            window.print();
+          }, 1000);
+        },
+      );
+      function format() {
+        BrowserDetect.init();
+        if (BrowserDetect.browser == "Firefox") {
+          var headerHTML = $("#headerHTML").clone();
+          var contentHTML = $("#contentHTML").clone();
+
+          $("#content")
+            .empty()
+            .html(
+              "<table><thead><tr><td>" +
+                headerHTML.html() +
+                "</td></tr></thead><tbody><tr><td>" +
+                contentHTML.html() +
+                "</td></tr></tbody></table>",
+            );
+        }
+      }
+    </script>
+
+    <script
+      defer=""
+      src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516"
+      integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg=="
+      data-cf-beacon='{"version":"2024.11.0","token":"182ecdcfb8194b148324a79d58192b9b","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
