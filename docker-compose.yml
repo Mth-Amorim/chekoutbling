@@ -4,13 +4,8 @@ services:
     container_name: box-check-joy-app
     working_dir: /app
     command: sh -c "bun install && bun run dev --host 0.0.0.0 --port 3000"
-
-    # ❌ nem precisa expor porta quando usa Traefik
-    # ports:
-    #   - "52222:3000"
-    networks:
-      - dokploy-networks
-
+    ports:
+      - "52222:3000"
     volumes:
       - .:/app
       - /app/node_modules
@@ -19,14 +14,3 @@ services:
 
     environment:
       - NODE_ENV=development
-
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.box-check-joy-app.rule=Host(`checkout.uzenails.com.br`)"
-      - "traefik.http.routers.box-check-joy-app.entrypoints=websecure"
-      - "traefik.http.routers.box-check-joy-app.tls=true"
-      - "traefik.http.routers.box-check-joy-app.tls.certresolver=letsencrypt"
-      - "traefik.http.services.box-check-joy-app.loadbalancer.server.port=3000"
-networks:
-  dokploy-networks:
-    external: true
