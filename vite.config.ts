@@ -13,6 +13,11 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: appPort,
+      allowedHosts: [
+        'uzeapi-frontend-poel8n-4f78ff-187-77-35-239.traefik.me',
+        'box-check-joy.uzenails.com.br',
+        'checkout.uzenails.com.br'
+      ],
       hmr: {
         overlay: false,
       },
