@@ -13,6 +13,11 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: appPort,
+      allowedHosts: [
+        "checkout.uzenails.com.br",
+        ".uzenails.com.br",
+        "localhost"
+      ],
       hmr: {
         overlay: false,
       },
