@@ -7,17 +7,13 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const apiBase = env.VITE_API_BASE ?? "http://localhost:52534";
-  const appPort = Number(env.APP_PORT ?? 8080);
+  const appPort = Number(env.APP_PORT ?? 3000);
 
   return {
     server: {
-      host: "::",
+      host: "0.0.0.0",
       port: appPort,
-      allowedHosts: [
-        "checkout.uzenails.com.br",
-        ".uzenails.com.br",
-        "localhost"
-      ],
+      allowedHosts: true,
       hmr: {
         overlay: false,
       },
