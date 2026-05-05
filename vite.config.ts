@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: appPort,
-      allowedHosts: true,
       hmr: {
         overlay: false,
       },
