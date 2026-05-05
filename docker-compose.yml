@@ -1,11 +1,9 @@
 services:
   web:
-    image: oven/bun:latest
+    build: .
     container_name: box-check-joy-app
-    working_dir: /app
-    command: sh -c "bun install && bun run dev --host 0.0.0.0"
     ports:
-      - "52222:3000"
+      - "52222:80"
     volumes:
       - .:/app
       - /app/node_modules
