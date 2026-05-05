@@ -196,10 +196,16 @@ const Inventory = () => {
                         return (
                           <TableCell key={depHeader.id} className="text-center font-mono border-l border-white/5">
                             <div className="flex justify-around items-center gap-2">
-                              <span className={`text-xs font-bold ${virtual > 0 ? 'text-zinc-200' : 'text-zinc-700'}`}>
+                              <span className={`text-xs font-bold ${
+                                virtual < 0 ? 'text-red-500' : 
+                                virtual > 0 ? 'text-zinc-200' : 'text-zinc-700'
+                              }`}>
                                 {virtual.toLocaleString('pt-BR')}
                               </span>
-                              <span className={`text-[10px] ${fisico > 0 ? 'text-zinc-500' : 'text-zinc-800'}`}>
+                              <span className={`text-[10px] ${
+                                fisico < 0 ? 'text-red-500/70' : 
+                                fisico > 0 ? 'text-zinc-500' : 'text-zinc-800'
+                              }`}>
                                 {fisico.toLocaleString('pt-BR')}
                               </span>
                             </div>
@@ -209,12 +215,16 @@ const Inventory = () => {
                       <TableCell className="text-right pr-8 bg-emerald-500/5 border-l border-white/5">
                         <div className="flex flex-col items-end gap-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-lg font-black text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+                            <span className={`text-lg font-black drop-shadow-[0_0_8px_rgba(52,211,153,0.3)] ${
+                              item.saldoVirtualTotal < 0 ? 'text-red-500' : 'text-emerald-400'
+                            }`}>
                               {item.saldoVirtualTotal.toLocaleString('pt-BR')}
                             </span>
                             <ChevronRight className="h-4 w-4 text-emerald-500/30 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                           </div>
-                          <span className="text-[10px] font-bold text-emerald-900/50 mr-6">
+                          <span className={`text-[10px] font-bold mr-6 ${
+                            item.saldoFisicoTotal < 0 ? 'text-red-500/50' : 'text-emerald-900/50'
+                          }`}>
                             Físico: {item.saldoFisicoTotal.toLocaleString('pt-BR')}
                           </span>
                         </div>
