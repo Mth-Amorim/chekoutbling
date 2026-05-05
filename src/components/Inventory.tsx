@@ -38,8 +38,8 @@ const Inventory = () => {
     setLoading(true);
     setError(null);
     try {
-      // Using /api prefix to benefit from Vite proxy configured in vite.config.ts
-      const response = await fetch("/api/estoques/saldos");
+      // Calling Traefik link directly as requested
+      const response = await fetch("http://uzeapi-blingapiv1-ruqtco-15fbdb-187-77-35-239.traefik.me/api/estoques/saldos");
       if (!response.ok) throw new Error(`Erro ${response.status}: Falha ao carregar dados do estoque`);
       const json = await response.json();
       setData(json.data || []);
