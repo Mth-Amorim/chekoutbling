@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { useToast } from "./ui/use-toast";
 
 interface Product {
   id: number;
@@ -33,6 +34,7 @@ const Inventory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const { toast } = useToast();
 
   const fetchData = async () => {
     setLoading(true);
@@ -44,6 +46,10 @@ const Inventory = () => {
       const json = await response.json();
       setData(json.data || []);
       setLastUpdate(new Date());
+      toast({
+        title: "Dados Atualizados",
+        description: "O estoque foi sincronizado com sucesso.",
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");
     } finally {
@@ -129,10 +135,10 @@ const Inventory = () => {
           <Button 
             onClick={fetchData} 
             disabled={loading}
-            className="h-14 w-14 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all"
-            variant="ghost"
+            className="h-14 px-6 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-all text-primary font-bold gap-2 shadow-lg shadow-primary/5 active:scale-95"
           >
-            <RefreshCw className={`h-5 w-5 text-primary ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
+            <span>{loading ? 'ATUALIZANDO...' : 'ATUALIZAR'}</span>
           </Button>
         </div>
       </div>
