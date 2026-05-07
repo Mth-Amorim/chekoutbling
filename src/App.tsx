@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound.tsx";
 import PeridoPercial from "./pages/PeridoPercial.tsx";
 import AdministradorExpedicao from "./pages/AdministradorExpedicao.tsx";
 import Login from "./pages/Login.tsx";
+import EstoqueLojista from "./pages/EstoqueLojista.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Estoque />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/EstoqueLojista"
+            element={
+              <ProtectedRoute>
+                <EstoqueLojista />
               </ProtectedRoute>
             }
           />
